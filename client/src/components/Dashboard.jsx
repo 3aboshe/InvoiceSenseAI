@@ -6,7 +6,6 @@ import {
   DollarSign, 
   Calendar,
   BarChart3,
-  PieChart,
   Download,
   Filter,
   RefreshCw
