@@ -281,8 +281,8 @@ module.exports = async function handler(req, res) {
 
   try {
     // Check if we can process the file - if not, return demo data
-    if (!groq || !upload) {
-      console.log('API not fully configured, returning demo data');
+    if (!groq) {
+      console.log('Groq API not configured, returning demo data');
       // Return demo response for testing
       return res.json({
         success: true,
@@ -301,7 +301,7 @@ module.exports = async function handler(req, res) {
           processingTime: 2.5,
           invoiceNumber: "INV-DEMO-001"
         },
-        message: "Demo mode - API services not fully configured. Upload working with demo data.",
+        message: "Demo mode - Groq API not configured. Upload working with demo data.",
         demo: true,
         metadata: {
           processingTime: 2.5,
@@ -326,9 +326,10 @@ module.exports = async function handler(req, res) {
     
     uploadMiddleware(req, res, async (err) => {
       if (err) {
+        console.error('Upload middleware error:', err);
         return res.status(400).json({ 
           success: false, 
-          error: err.message 
+          error: err.message || 'File upload error'
         });
       }
 
@@ -341,7 +342,7 @@ module.exports = async function handler(req, res) {
 
       try {
         const startTime = Date.now();
-        console.log('Processing uploaded image...');
+        console.log('Processing uploaded image:', req.file.originalname);
 
         // Step 1: Convert image buffer to base64
         const base64Image = bufferToBase64(req.file.buffer);
@@ -363,21 +364,26 @@ module.exports = async function handler(req, res) {
         let savedResult = null;
         let airtableMessage = '';
         
-        try {
-          console.log('Saving data to Airtable...');
-          const metadata = {
-            processingTime,
-            originalFilename: req.file.originalname,
-            userId: req.headers['x-user-id'] || 'anonymous', // Frontend can send user ID
-            fileSize: req.file.size
-          };
-          
-          savedResult = await saveToAirtable(parsedData, metadata);
-          console.log('Data saved to Airtable successfully');
-          airtableMessage = ` and saved ${savedResult.records.length} line items to Airtable`;
-        } catch (airtableError) {
-          console.warn('Airtable save failed, but continuing with data extraction:', airtableError.message);
-          airtableMessage = ' (Airtable save failed - check your table configuration)';
+        if (base) {
+          try {
+            console.log('Saving data to Airtable...');
+            const metadata = {
+              processingTime,
+              originalFilename: req.file.originalname,
+              userId: req.headers['x-user-id'] || 'anonymous', // Frontend can send user ID
+              fileSize: req.file.size
+            };
+            
+            savedResult = await saveToAirtable(parsedData, metadata);
+            console.log('Data saved to Airtable successfully');
+            airtableMessage = ` and saved ${savedResult.records.length} line items to Airtable`;
+          } catch (airtableError) {
+            console.warn('Airtable save failed, but continuing with data extraction:', airtableError.message);
+            airtableMessage = ' (Airtable save failed - check your table configuration)';
+          }
+        } else {
+          console.log('Airtable not configured, skipping database save');
+          airtableMessage = ' (Airtable not configured)';
         }
 
         // Step 5: Send enhanced success response
@@ -403,7 +409,8 @@ module.exports = async function handler(req, res) {
         console.error('Error processing upload:', error);
         res.status(500).json({
           success: false,
-          error: error.message || 'An error occurred while processing the invoice'
+          error: error.message || 'An error occurred while processing the invoice',
+          details: process.env.NODE_ENV === 'development' ? error.stack : undefined
         });
       }
     });
