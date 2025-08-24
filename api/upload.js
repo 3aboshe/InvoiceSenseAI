@@ -1,6 +1,6 @@
-import multer from 'multer';
-import { Groq } from 'groq-sdk';
-import Airtable from 'airtable';
+const multer = require('multer');
+const { Groq } = require('groq-sdk');
+const Airtable = require('airtable');
 
 // Initialize Groq client
 const groq = new Groq({
@@ -122,7 +122,7 @@ const saveToAirtable = async (parsedData) => {
 };
 
 // Vercel serverless function
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
