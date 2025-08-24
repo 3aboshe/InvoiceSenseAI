@@ -18,7 +18,14 @@ const Reports = () => {
   const [dateRange, setDateRange] = useState('30d');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
-  const [reportData, setReportData] = useState(null);
+  const [reportData, setReportData] = useState({
+    summary: {},
+    topClients: [],
+    dailyBreakdown: [],
+    clientList: [],
+    statusBreakdown: [],
+    categoryBreakdown: []
+  });
   const [loading, setLoading] = useState(false);
   const [exportFormat, setExportFormat] = useState('csv');
 
@@ -266,12 +273,12 @@ const Reports = () => {
     }
     
     // Add detailed data
-    if (data.dailyBreakdown) {
+    if (data.dailyBreakdown && data.dailyBreakdown.length > 0) {
       csv += 'Date,Revenue,Invoices\n';
       data.dailyBreakdown.forEach(day => {
         csv += `${day.date},${day.revenue.toFixed(2)},${day.invoices}\n`;
       });
-    } else if (data.clientList) {
+    } else if (data.clientList && data.clientList.length > 0) {
       csv += 'Client Name,Revenue,Invoices,Status\n';
       data.clientList.forEach(client => {
         csv += `${client.name},${client.revenue},${client.invoices},${client.status}\n`;
@@ -313,19 +320,19 @@ const Reports = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-slate-700/50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-slate-400">Total Revenue</h4>
-                <p className="text-2xl font-bold text-white">{formatCurrency(reportData.summary.totalRevenue)}</p>
+                <p className="text-2xl font-bold text-white">{formatCurrency(reportData.summary?.totalRevenue || 0)}</p>
               </div>
               <div className="bg-slate-700/50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-slate-400">Average Daily</h4>
-                <p className="text-2xl font-bold text-white">{formatCurrency(reportData.summary.averageDaily)}</p>
+                <p className="text-2xl font-bold text-white">{formatCurrency(reportData.summary?.averageDaily || 0)}</p>
               </div>
               <div className="bg-slate-700/50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-slate-400">Highest Day</h4>
-                <p className="text-2xl font-bold text-white">{formatCurrency(reportData.summary.highestDay)}</p>
+                <p className="text-2xl font-bold text-white">{formatCurrency(reportData.summary?.highestDay || 0)}</p>
               </div>
               <div className="bg-slate-700/50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-slate-400">Growth Rate</h4>
-                <p className="text-2xl font-bold text-green-400">+{reportData.summary.growthRate}%</p>
+                <p className="text-2xl font-bold text-green-400">+{reportData.summary?.growthRate || 0}%</p>
               </div>
             </div>
 
@@ -333,7 +340,7 @@ const Reports = () => {
             <div className="bg-slate-700/50 rounded-lg p-6">
               <h4 className="text-lg font-semibold text-white mb-4">Top Clients</h4>
               <div className="space-y-3">
-                {reportData.topClients.map((client, index) => (
+                {(reportData.topClients || []).map((client, index) => (
                   <div key={index} className="flex justify-between items-center">
                     <span className="text-slate-300">{client.name}</span>
                     <span className="font-semibold text-white">{formatCurrency(client.revenue)}</span>
@@ -350,19 +357,19 @@ const Reports = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-slate-700/50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-slate-400">Total Clients</h4>
-                <p className="text-2xl font-bold text-white">{reportData.summary.totalClients}</p>
+                <p className="text-2xl font-bold text-white">{reportData.summary?.totalClients || 0}</p>
               </div>
               <div className="bg-slate-700/50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-slate-400">Active Clients</h4>
-                <p className="text-2xl font-bold text-green-400">{reportData.summary.activeClients}</p>
+                <p className="text-2xl font-bold text-green-400">{reportData.summary?.activeClients || 0}</p>
               </div>
               <div className="bg-slate-700/50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-slate-400">New Clients</h4>
-                <p className="text-2xl font-bold text-blue-400">{reportData.summary.newClients}</p>
+                <p className="text-2xl font-bold text-blue-400">{reportData.summary?.newClients || 0}</p>
               </div>
               <div className="bg-slate-700/50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-slate-400">Churn Rate</h4>
-                <p className="text-2xl font-bold text-red-400">{reportData.summary.churnRate}%</p>
+                <p className="text-2xl font-bold text-red-400">{reportData.summary?.churnRate || 0}%</p>
               </div>
             </div>
           </div>
@@ -374,19 +381,19 @@ const Reports = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-slate-700/50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-slate-400">Total Invoices</h4>
-                <p className="text-2xl font-bold text-white">{reportData.summary.totalInvoices}</p>
+                <p className="text-2xl font-bold text-white">{reportData.summary?.totalInvoices || 0}</p>
               </div>
               <div className="bg-slate-700/50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-slate-400">Successful</h4>
-                <p className="text-2xl font-bold text-green-400">{reportData.summary.successfulProcessing}</p>
+                <p className="text-2xl font-bold text-green-400">{reportData.summary?.successfulProcessing || 0}</p>
               </div>
               <div className="bg-slate-700/50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-slate-400">Failed</h4>
-                <p className="text-2xl font-bold text-red-400">{reportData.summary.failedProcessing}</p>
+                <p className="text-2xl font-bold text-red-400">{reportData.summary?.failedProcessing || 0}</p>
               </div>
               <div className="bg-slate-700/50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-slate-400">Avg Processing</h4>
-                <p className="text-2xl font-bold text-white">{reportData.summary.averageProcessingTime}s</p>
+                <p className="text-2xl font-bold text-white">{reportData.summary?.averageProcessingTime || 0}s</p>
               </div>
             </div>
           </div>
