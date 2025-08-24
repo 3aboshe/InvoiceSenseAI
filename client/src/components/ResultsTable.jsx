@@ -17,17 +17,31 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
     const num = parseFloat(amount)
     if (isNaN(num)) return amount
     
-    if (curr === 'IQD' || curr === 'د.ع') {
+    // Map currency symbols to ISO codes
+    let currencyCode = curr
+    if (curr === '$' || curr === 'USD') {
+      currencyCode = 'USD'
+    } else if (curr === '€' || curr === 'EUR') {
+      currencyCode = 'EUR'
+    } else if (curr === '£' || curr === 'GBP') {
+      currencyCode = 'GBP'
+    } else if (curr === 'IQD' || curr === 'د.ع') {
       return new Intl.NumberFormat('ar-IQ', {
         style: 'currency',
         currency: 'IQD',
         minimumFractionDigits: 0
       }).format(num)
+    } else if (curr && curr.length <= 3) {
+      // Assume it's already an ISO code
+      currencyCode = curr
+    } else {
+      // Default to USD for unknown currencies
+      currencyCode = 'USD'
     }
     
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: curr || 'USD',
+      currency: currencyCode,
       minimumFractionDigits: 2
     }).format(num)
   }
