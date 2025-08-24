@@ -122,9 +122,19 @@ const ClientDetail = () => {
   const loadClientData = async () => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
+      const API_URL = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${API_URL}/api/clients?id=${clientId}`);
       
+      if (response.ok) {
+        const responseData = await response.json();
+        if (responseData.success && responseData.data) {
+          setClient(responseData.data.client);
+          setInvoices(responseData.data.invoices || []);
+          return;
+        }
+      }
+      
+      // Fallback to mock data
       const clientData = mockClients[clientId];
       if (!clientData) {
         navigate('/clients');
@@ -135,7 +145,14 @@ const ClientDetail = () => {
       setInvoices(mockInvoices);
     } catch (error) {
       console.error('Error loading client data:', error);
-      navigate('/clients');
+      // Fallback to mock data
+      const clientData = mockClients[clientId];
+      if (clientData) {
+        setClient(clientData);
+        setInvoices(mockInvoices);
+      } else {
+        navigate('/clients');
+      }
     } finally {
       setLoading(false);
     }

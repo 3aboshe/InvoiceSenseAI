@@ -184,27 +184,69 @@ ${rawText}`
   }
 };
 
-// Helper function to save data to Airtable
-const saveToAirtable = async (parsedData) => {
+// Helper function to save data to Airtable with enhanced tracking
+const saveToAirtable = async (parsedData, metadata = {}) => {
   try {
     const { client_id, company, line_items } = parsedData;
+    const { userId, processingTime, originalFilename } = metadata;
     
-    // Create records for each line item
-    const records = line_items.map(item => ({
+    // Check if client exists, if not create one
+    let clientRecord = null;
+    if (base) {
+      try {
+        const existingClients = await base('Clients').select({
+          filterByFormula: `OR({Name} = '${company}', {Email} = '${company}')`
+        }).firstPage();
+        
+        if (existingClients.length > 0) {
+          clientRecord = existingClients[0];
+        } else {
+          // Create new client
+          clientRecord = await base('Clients').create({
+            'Name': company,
+            'Client ID': client_id,
+            'Status': 'active',
+            'Join Date': new Date().toISOString().split('T')[0],
+            'Industry': 'Unknown',
+            'Notes': `Auto-created from invoice processing on ${new Date().toISOString()}`
+          });
+        }
+      } catch (clientError) {
+        console.warn('Could not create/find client, continuing with invoice creation:', clientError);
+      }
+    }
+    
+    // Generate invoice number
+    const invoiceNumber = `INV-${Date.now().toString().slice(-8)}`;
+    
+    // Create records for each line item with enhanced data
+    const records = line_items.map((item, index) => ({
       fields: {
-        'Client ID': client_id,
+        'Client ID': clientRecord ? clientRecord.id : client_id,
         'Company': company,
         'Description': item.description,
-        'Quantity': item.quantity,
-        'Unit Price': item.unit_price,
-        'Total': item.amount || item.total
+        'Quantity': parseFloat(item.quantity) || 1,
+        'Unit Price': parseFloat(item.unit_price) || 0,
+        'Total': parseFloat(item.amount || item.total) || 0,
+        'Currency': item.currency || 'USD',
+        'Invoice Number': `${invoiceNumber}-${index + 1}`,
+        'Status': 'Processed',
+        'Processing Time': processingTime || 0,
+        'Original Filename': originalFilename || 'unknown',
+        'Processed By': userId || 'anonymous',
+        'Date': new Date().toISOString().split('T')[0],
+        'Created': new Date().toISOString()
       }
     }));
 
     // Insert records into Airtable
     const createdRecords = await base(process.env.AIRTABLE_TABLE_NAME).create(records);
     
-    return createdRecords;
+    return {
+      records: createdRecords,
+      invoiceNumber,
+      clientId: clientRecord ? clientRecord.id : client_id
+    };
   } catch (error) {
     console.error('Error saving to Airtable:', error);
     throw new Error('Failed to save data to Airtable');
@@ -257,6 +299,7 @@ module.exports = async function handler(req, res) {
       }
 
       try {
+        const startTime = Date.now();
         console.log('Processing uploaded image...');
 
         // Step 1: Convert image buffer to base64
@@ -273,26 +316,46 @@ module.exports = async function handler(req, res) {
         const parsedData = await structureTextToJSON(rawText);
         console.log('JSON structuring completed');
 
-        // Step 4: Save data to Airtable (optional)
-        let savedRecords = null;
+        const processingTime = (Date.now() - startTime) / 1000;
+
+        // Step 4: Save data to Airtable with enhanced metadata
+        let savedResult = null;
         let airtableMessage = '';
         
         try {
           console.log('Saving data to Airtable...');
-          savedRecords = await saveToAirtable(parsedData);
+          const metadata = {
+            processingTime,
+            originalFilename: req.file.originalname,
+            userId: req.headers['x-user-id'] || 'anonymous', // Frontend can send user ID
+            fileSize: req.file.size
+          };
+          
+          savedResult = await saveToAirtable(parsedData, metadata);
           console.log('Data saved to Airtable successfully');
-          airtableMessage = ` and saved ${savedRecords.length} line items to Airtable`;
+          airtableMessage = ` and saved ${savedResult.records.length} line items to Airtable`;
         } catch (airtableError) {
           console.warn('Airtable save failed, but continuing with data extraction:', airtableError.message);
           airtableMessage = ' (Airtable save failed - check your table configuration)';
         }
 
-        // Step 5: Send success response
+        // Step 5: Send enhanced success response
         res.json({
           success: true,
-          data: parsedData,
-          message: `Successfully processed invoice${airtableMessage}`,
-          airtableSuccess: !!savedRecords
+          data: {
+            ...parsedData,
+            processingTime,
+            invoiceNumber: savedResult?.invoiceNumber,
+            clientId: savedResult?.clientId
+          },
+          message: `Successfully processed invoice in ${processingTime}s${airtableMessage}`,
+          airtableSuccess: !!savedResult,
+          metadata: {
+            processingTime,
+            filename: req.file.originalname,
+            fileSize: req.file.size,
+            timestamp: new Date().toISOString()
+          }
         });
 
       } catch (error) {

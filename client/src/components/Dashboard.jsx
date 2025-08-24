@@ -100,7 +100,19 @@ const Dashboard = () => {
       const responseData = await response.json();
       
       if (responseData.success) {
-        setAnalytics(responseData.data);
+        // Transform the API response to match our component structure
+        const transformedData = {
+          kpis: responseData.data.kpis || responseData.data,
+          revenueGrowth: responseData.data.kpis?.revenueGrowth || responseData.data.revenueGrowth || 15.2,
+          invoiceGrowth: responseData.data.kpis?.invoiceGrowth || responseData.data.invoiceGrowth || 8.7,
+          clientGrowth: responseData.data.kpis?.clientGrowth || responseData.data.clientGrowth || 12.1,
+          revenueData: responseData.data.revenueData || mockAnalytics.revenueData,
+          topClients: responseData.data.topClients || mockAnalytics.topClients,
+          currencyDistribution: responseData.data.currencyDistribution || mockAnalytics.currencyDistribution,
+          invoiceCategories: responseData.data.invoiceCategories || mockAnalytics.invoiceCategories,
+          recentActivity: responseData.data.recentActivity || mockAnalytics.recentActivity
+        };
+        setAnalytics(transformedData);
       } else {
         // Fallback to mock data if API fails
         setAnalytics(mockAnalytics);

@@ -90,16 +90,34 @@ const Reports = () => {
   const generateReport = async () => {
     setLoading(true);
     try {
-      // Simulate API call to generate report
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      const API_URL = import.meta.env.VITE_API_URL || '';
       const { start, end } = getDateRangeValues();
       
-      // Mock report data based on type
+      let url = `${API_URL}/api/reports?type=${reportType}&range=${dateRange}`;
+      
+      if (dateRange === 'custom' && customStartDate && customEndDate) {
+        url += `&startDate=${customStartDate}&endDate=${customEndDate}`;
+      }
+      
+      const response = await fetch(url);
+      
+      if (response.ok) {
+        const responseData = await response.json();
+        if (responseData.success) {
+          setReportData(responseData.data);
+          return;
+        }
+      }
+      
+      // Fallback to mock data
       const mockData = generateMockReportData(reportType, start, end);
       setReportData(mockData);
     } catch (error) {
       console.error('Error generating report:', error);
+      // Fallback to mock data
+      const { start, end } = getDateRangeValues();
+      const mockData = generateMockReportData(reportType, start, end);
+      setReportData(mockData);
     } finally {
       setLoading(false);
     }
@@ -182,41 +200,56 @@ const Reports = () => {
 
   const exportReport = async (format) => {
     try {
-      // Simulate export process
       console.log(`Exporting ${reportType} report as ${format}...`);
       
-      // Create downloadable content
-      let content, filename, mimeType;
-      
       if (format === 'csv') {
-        content = generateCSV(reportData);
-        filename = `${reportType}-report-${format(new Date(), 'yyyy-MM-dd')}.csv`;
-        mimeType = 'text/csv';
+        // Use the backend CSV export API
+        const API_URL = import.meta.env.VITE_API_URL || '';
+        let exportType = reportType;
+        
+        // Map report types to export types
+        if (reportType === 'analytics') exportType = 'revenue';
+        
+        const url = `${API_URL}/api/export?type=${exportType}&range=${dateRange}`;
+        
+        // Create a temporary link and click it to download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${reportType}-report-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       } else if (format === 'pdf') {
-        // For PDF, you would typically use a library like jsPDF
-        content = generatePDFContent(reportData);
-        filename = `${reportType}-report-${format(new Date(), 'yyyy-MM-dd')}.pdf`;
-        mimeType = 'application/pdf';
+        // For PDF, generate content and download
+        const content = generatePDFContent(reportData);
+        const filename = `${reportType}-report-${new Date().toISOString().split('T')[0]}.pdf`;
+        const blob = new Blob([content], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
       } else {
-        // Excel format
-        content = generateExcelContent(reportData);
-        filename = `${reportType}-report-${format(new Date(), 'yyyy-MM-dd')}.xlsx`;
-        mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        // Excel format - use CSV for now
+        const content = generateExcelContent(reportData);
+        const filename = `${reportType}-report-${new Date().toISOString().split('T')[0]}.xlsx`;
+        const blob = new Blob([content], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
       }
-      
-      // Create and trigger download
-      const blob = new Blob([content], { type: mimeType });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
       
     } catch (error) {
       console.error('Error exporting report:', error);
+      alert('Export failed. Please try again.');
     }
   };
 

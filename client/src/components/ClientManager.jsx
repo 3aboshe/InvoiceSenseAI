@@ -85,28 +85,74 @@ const ClientManager = () => {
   const loadClients = async () => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
-      setClients(mockClients);
+      const API_URL = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${API_URL}/api/clients`);
+      
+      if (response.ok) {
+        const responseData = await response.json();
+        if (responseData.success) {
+          setClients(responseData.data);
+        } else {
+          setClients(mockClients);
+        }
+      } else {
+        setClients(mockClients);
+      }
     } catch (error) {
       console.error('Error loading clients:', error);
+      setClients(mockClients);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAddClient = (clientData) => {
-    const newClient = {
-      id: Date.now(),
-      ...clientData,
-      totalRevenue: 0,
-      invoiceCount: 0,
-      lastInvoice: null,
-      status: 'active',
-      joinDate: new Date().toISOString().split('T')[0]
-    };
-    setClients([...clients, newClient]);
-    setShowAddModal(false);
+  const handleAddClient = async (clientData) => {
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${API_URL}/api/clients`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(clientData),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        if (responseData.success) {
+          setClients([...clients, responseData.data]);
+          setShowAddModal(false);
+          return;
+        }
+      }
+      
+      // Fallback to local update
+      const newClient = {
+        id: Date.now(),
+        ...clientData,
+        totalRevenue: 0,
+        invoiceCount: 0,
+        lastInvoice: null,
+        status: 'active',
+        joinDate: new Date().toISOString().split('T')[0]
+      };
+      setClients([...clients, newClient]);
+      setShowAddModal(false);
+    } catch (error) {
+      console.error('Error adding client:', error);
+      // Fallback to local update
+      const newClient = {
+        id: Date.now(),
+        ...clientData,
+        totalRevenue: 0,
+        invoiceCount: 0,
+        lastInvoice: null,
+        status: 'active',
+        joinDate: new Date().toISOString().split('T')[0]
+      };
+      setClients([...clients, newClient]);
+      setShowAddModal(false);
+    }
   };
 
   const handleEditClient = (clientData) => {
