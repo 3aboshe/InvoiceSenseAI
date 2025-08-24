@@ -25,7 +25,6 @@ const ImageUploader = ({ onUpload, isLoading, error, darkMode }) => {
             dropzone
             ${isDragActive ? 'dropzone-active' : ''}
             ${isLoading ? 'pointer-events-none opacity-75' : ''}
-            ${darkMode ? 'dark' : ''}
           `}
         >
           <input {...getInputProps()} />

@@ -69,7 +69,31 @@ const structureTextToJSON = async (rawText) => {
       messages: [
         {
           role: "user",
-          content: `Based on the following text from an invoice, extract the Client ID, Company name, and all line items. Structure your response as a single, clean JSON object. Each line item in the invoice should be an object in a "line_items" array. The JSON format must be exactly: {"client_id": "...", "company": "...", "line_items": [{"description": "...", "quantity": ..., "unit_price": ..., "total": ...}]}. Return only the JSON object and nothing else.
+          content: `You are an expert invoice data extractor. Analyze the following invoice text and extract structured data. 
+
+IMPORTANT: Return ONLY a valid JSON object with this exact structure:
+{
+  "client_id": "extracted client ID or customer number",
+  "company": "extracted company/vendor name", 
+  "line_items": [
+    {
+      "description": "item description",
+      "quantity": "quantity as number",
+      "unit_price": "unit price as number",
+      "amount": "total amount for this item as number",
+      "currency": "USD or IQD or د.ع"
+    }
+  ]
+}
+
+Rules:
+- Extract ALL line items from the invoice
+- Use "amount" field for the total price of each line item
+- If currency is not specified, default to "USD"
+- If client_id is not found, use "N/A"
+- If company is not found, use "N/A"
+- Ensure all numbers are numeric values, not strings
+- Return ONLY the JSON object, no other text
 
 Invoice text:
 ${rawText}`
@@ -107,7 +131,7 @@ const saveToAirtable = async (parsedData) => {
         'Description': item.description,
         'Quantity': item.quantity,
         'Unit Price': item.unit_price,
-        'Total': item.total
+        'Total': item.amount || item.total
       }
     }));
 

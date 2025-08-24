@@ -31,7 +31,10 @@ function App() {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
 
-      const data = await response.json()
+      const responseData = await response.json()
+      
+      // Extract data from the response structure
+      const data = responseData.data || responseData
       
       // Apply currency conversion if enabled and IQD is detected
       if (autoConvertCurrency && data.line_items) {
