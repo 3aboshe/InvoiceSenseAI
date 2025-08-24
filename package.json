@@ -1,0 +1,36 @@
+{
+  "name": "ahmed-qanadr-ai-invoice-extractor",
+  "version": "1.0.0",
+  "description": "AI-powered invoice data extraction application with beautiful Apple-inspired interface",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm start",
+    "build": "cd client && npm run build",
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install",
+    "start": "cd server && npm start"
+  },
+  "keywords": [
+    "ai",
+    "invoice",
+    "extraction",
+    "groq",
+    "airtable",
+    "react",
+    "nodejs",
+    "vercel"
+  ],
+  "author": "Ahmed Qanadr",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/ahmed-qanadr-ai-invoice-extractor.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

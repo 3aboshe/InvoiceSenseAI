@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  body {
+    @apply bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-xl rounded-xl shadow-lg border border-white/20;
+  }
+  
+  .glass-card-hover {
+    @apply hover:bg-white/80 hover:shadow-xl transition-all duration-300 ease-out;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-medium px-8 py-4 rounded-2xl transition-all duration-300 ease-out focus:outline-none focus:ring-4 focus:ring-blue-500/30 focus:ring-offset-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+  }
+  
+  .btn-secondary {
+    @apply bg-white/80 hover:bg-white backdrop-blur-sm text-slate-700 font-medium px-8 py-4 rounded-2xl transition-all duration-300 ease-out focus:outline-none focus:ring-4 focus:ring-slate-500/30 focus:ring-offset-2 shadow-lg hover:shadow-xl border border-white/50 transform hover:-translate-y-0.5;
+  }
+  
+  .dropzone {
+    @apply border-2 border-dashed border-slate-300/50 rounded-2xl p-12 text-center cursor-pointer transition-all duration-500 ease-out bg-white/40 backdrop-blur-sm hover:bg-white/60 hover:border-slate-400/70 hover:shadow-xl transform hover:scale-[1.02];
+  }
+  
+  .dropzone-active {
+    @apply border-blue-400/70 bg-blue-50/50 shadow-xl scale-[1.02];
+  }
+  
+  .table-row {
+    @apply hover:bg-white/50 transition-colors duration-200;
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
+  
+  .bounce-in {
+    animation: bounceIn 0.8s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
