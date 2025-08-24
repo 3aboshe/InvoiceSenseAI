@@ -188,21 +188,21 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
-            <p className="text-slate-400">Welcome back! Here's what's happening with your invoices.</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Dashboard</h1>
+            <p className="text-sm sm:text-base text-slate-400">Welcome back! Here's what's happening with your invoices.</p>
           </div>
           
-          <div className="flex items-center space-x-4 mt-4 sm:mt-0">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mt-4 sm:mt-0 w-full sm:w-auto">
             {/* Time Range Selector */}
             <select 
               value={timeRange}
               onChange={(e) => setTimeRange(e.target.value)}
-              className="bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto"
             >
               <option value="7d">Last 7 days</option>
               <option value="30d">Last 30 days</option>
@@ -214,7 +214,7 @@ const Dashboard = () => {
             <button 
               onClick={refreshData}
               disabled={refreshing}
-              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 px-3 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base w-full sm:w-auto"
             >
               <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
               <span>Refresh</span>
@@ -223,81 +223,81 @@ const Dashboard = () => {
         </div>
 
         {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-400 text-sm font-medium">Total Revenue</p>
-                <p className="text-2xl font-bold text-white mt-1">
+                <p className="text-slate-400 text-xs sm:text-sm font-medium">Total Revenue</p>
+                <p className="text-lg sm:text-2xl font-bold text-white mt-1">
                   {formatCurrency(analytics.kpis.totalRevenue)}
                 </p>
-                <p className="text-green-400 text-sm mt-1 flex items-center">
+                <p className="text-green-400 text-xs sm:text-sm mt-1 flex items-center">
                   <TrendingUp className="w-3 h-3 mr-1" />
                   +{analytics.revenueGrowth}%
                 </p>
               </div>
-              <div className="p-3 bg-green-500/20 rounded-lg">
-                <DollarSign className="w-6 h-6 text-green-400" />
+              <div className="p-2 sm:p-3 bg-green-500/20 rounded-lg">
+                <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-green-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
+          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-400 text-sm font-medium">Total Invoices</p>
-                <p className="text-2xl font-bold text-white mt-1">
+                <p className="text-slate-400 text-xs sm:text-sm font-medium">Total Invoices</p>
+                <p className="text-lg sm:text-2xl font-bold text-white mt-1">
                   {formatNumber(analytics.kpis.totalInvoices)}
                 </p>
-                <p className="text-blue-400 text-sm mt-1 flex items-center">
+                <p className="text-blue-400 text-xs sm:text-sm mt-1 flex items-center">
                   <TrendingUp className="w-3 h-3 mr-1" />
                   +{analytics.invoiceGrowth}%
                 </p>
               </div>
-              <div className="p-3 bg-blue-500/20 rounded-lg">
-                <FileText className="w-6 h-6 text-blue-400" />
+              <div className="p-2 sm:p-3 bg-blue-500/20 rounded-lg">
+                <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
+          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-400 text-sm font-medium">Total Clients</p>
-                <p className="text-2xl font-bold text-white mt-1">
+                <p className="text-slate-400 text-xs sm:text-sm font-medium">Total Clients</p>
+                <p className="text-lg sm:text-2xl font-bold text-white mt-1">
                   {formatNumber(analytics.kpis.totalClients)}
                 </p>
-                <p className="text-purple-400 text-sm mt-1 flex items-center">
+                <p className="text-purple-400 text-xs sm:text-sm mt-1 flex items-center">
                   <TrendingUp className="w-3 h-3 mr-1" />
                   +{analytics.clientGrowth}%
                 </p>
               </div>
-              <div className="p-3 bg-purple-500/20 rounded-lg">
-                <Users className="w-6 h-6 text-purple-400" />
+              <div className="p-2 sm:p-3 bg-purple-500/20 rounded-lg">
+                <Users className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
+          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-400 text-sm font-medium">Success Rate</p>
-                <p className="text-2xl font-bold text-white mt-1">
+                <p className="text-slate-400 text-xs sm:text-sm font-medium">Success Rate</p>
+                <p className="text-lg sm:text-2xl font-bold text-white mt-1">
                   {analytics.kpis.successRate}%
                 </p>
-                <p className="text-slate-400 text-sm mt-1">
+                <p className="text-slate-400 text-xs sm:text-sm mt-1">
                   Avg {analytics.kpis.avgProcessingTime}s processing
                 </p>
               </div>
-              <div className="p-3 bg-yellow-500/20 rounded-lg">
-                <BarChart3 className="w-6 h-6 text-yellow-400" />
+              <div className="p-2 sm:p-3 bg-yellow-500/20 rounded-lg">
+                <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400" />
               </div>
             </div>
           </div>
         </div>
 
         {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
           {/* Revenue Chart */}
           <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
             <div className="flex items-center justify-between mb-6">
@@ -308,7 +308,7 @@ const Dashboard = () => {
               </div>
             </div>
             <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={analytics.revenueData}>
+              <AreaChart data={analytics.revenueData || []}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3}/>
@@ -351,7 +351,7 @@ const Dashboard = () => {
               </button>
             </div>
             <div className="space-y-4">
-              {analytics.topClients.map((client, index) => (
+              {(analytics.topClients || []).map((client, index) => (
                 <div key={index} className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
@@ -370,14 +370,14 @@ const Dashboard = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Currency Distribution */}
           <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
             <h3 className="text-lg font-semibold text-white mb-6">Currency Distribution</h3>
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
                 <Pie
-                  data={analytics.currencyDistribution}
+                  data={analytics.currencyDistribution || []}
                   cx="50%"
                   cy="50%"
                   innerRadius={40}
@@ -385,7 +385,7 @@ const Dashboard = () => {
                   paddingAngle={5}
                   dataKey="value"
                 >
-                  {analytics.currencyDistribution.map((entry, index) => (
+                  {(analytics.currencyDistribution || []).map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -399,7 +399,7 @@ const Dashboard = () => {
           <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
             <h3 className="text-lg font-semibold text-white mb-6">Invoice Categories</h3>
             <div className="space-y-4">
-              {analytics.invoiceCategories.map((category, index) => (
+              {(analytics.invoiceCategories || []).map((category, index) => (
                 <div key={index} className="flex items-center justify-between">
                   <div>
                     <p className="font-medium text-white">{category.category}</p>
@@ -415,7 +415,7 @@ const Dashboard = () => {
           <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
             <h3 className="text-lg font-semibold text-white mb-6">Recent Activity</h3>
             <div className="space-y-4">
-              {analytics.recentActivity.map((activity) => (
+              {(analytics.recentActivity || []).map((activity) => (
                 <div key={activity.id} className="flex items-start space-x-3">
                   <div className={`w-2 h-2 rounded-full mt-2 ${
                     activity.type === 'invoice' ? 'bg-blue-400' : 'bg-green-400'
