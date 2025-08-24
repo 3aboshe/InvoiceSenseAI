@@ -293,6 +293,12 @@ app.post('/api/demo', upload.single('image'), (req, res) => {
   });
 });
 
+// Import analytics routes
+const analyticsRoutes = require('./routes/analytics');
+
+// Use analytics routes
+app.use('/api/analytics', analyticsRoutes);
+
 // Error handling middleware
 app.use((error, req, res, next) => {
   console.error('Unhandled error:', error);
