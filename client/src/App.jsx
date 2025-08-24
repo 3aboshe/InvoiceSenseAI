@@ -7,7 +7,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [results, setResults] = useState(null)
-  const [darkMode, setDarkMode] = useState(false)
   const [autoConvertCurrency, setAutoConvertCurrency] = useState(false)
 
   // Currency conversion rate
@@ -64,20 +63,12 @@ function App() {
     }
   }
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode)
-  }
-
   const toggleCurrencyConversion = () => {
     setAutoConvertCurrency(!autoConvertCurrency)
   }
 
   return (
-    <div className={`min-h-screen flex flex-col transition-colors duration-300 ${
-      darkMode 
-        ? 'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white' 
-        : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 text-slate-900'
-    }`}>
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
       {/* Simple Header */}
       <header className="mx-4 sm:mx-6 mt-4 sm:mt-6 mb-3 sm:mb-4">
         <div className="max-w-6xl mx-auto">
@@ -87,52 +78,33 @@ function App() {
                 <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                <h1 className="text-xl sm:text-2xl font-bold text-white">
                   InvoiceSense AI
                 </h1>
-                <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm">
+                <p className="text-slate-400 text-xs sm:text-sm">
                   AI-powered invoice data extraction
                 </p>
               </div>
             </div>
             
-            {/* Settings Toggles */}
-            <div className="flex items-center space-x-3">
-              {/* Currency Conversion Toggle */}
-              <div className="flex items-center space-x-2">
-                <span className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">
-                  IQD→USD
-                </span>
-                <button
-                  onClick={toggleCurrencyConversion}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                    autoConvertCurrency 
-                      ? 'bg-blue-600 dark:bg-blue-500' 
-                      : 'bg-slate-200 dark:bg-slate-700'
-                  }`}
-                >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      autoConvertCurrency ? 'translate-x-6' : 'translate-x-1'
-                    }`}
-                  />
-                </button>
-              </div>
-              
-              {/* Dark Mode Toggle */}
+            {/* Currency Conversion Toggle */}
+            <div className="flex items-center space-x-2">
+              <span className="text-xs sm:text-sm font-medium text-slate-400">
+                IQD→USD
+              </span>
               <button
-                onClick={toggleDarkMode}
-                className={`p-2 rounded-lg transition-colors ${
-                  darkMode 
-                    ? 'bg-slate-700 hover:bg-slate-600 text-yellow-400' 
-                    : 'bg-white hover:bg-slate-50 text-slate-600 shadow-lg'
+                onClick={toggleCurrencyConversion}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                  autoConvertCurrency 
+                    ? 'bg-blue-500' 
+                    : 'bg-slate-700'
                 }`}
               >
-                {darkMode ? (
-                  <Sun className="w-4 h-4 sm:w-5 sm:h-5" />
-                ) : (
-                  <Moon className="w-4 h-4 sm:w-5 sm:h-5" />
-                )}
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    autoConvertCurrency ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
               </button>
             </div>
           </div>
@@ -147,14 +119,12 @@ function App() {
             onUpload={handleUpload} 
             isLoading={isLoading} 
             error={error}
-            darkMode={darkMode}
           />
           
           {/* Results Section */}
           {results && (
             <ResultsTable 
               data={results} 
-              darkMode={darkMode}
               autoConvertCurrency={autoConvertCurrency}
             />
           )}
