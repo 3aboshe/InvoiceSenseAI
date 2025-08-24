@@ -47,7 +47,7 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
   return (
     <div className="space-y-4">
       {/* Success Header */}
-      <div className="glass-card p-3 sm:p-4 lg:p-6 dark">
+      <div className="glass-card p-3 sm:p-4 lg:p-6">
         <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 mb-3 sm:mb-4">
           <div className="p-2 sm:p-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg sm:rounded-xl lg:rounded-2xl">
             <CheckCircle className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
@@ -76,7 +76,7 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
 
         {/* Invoice Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
-          <div className="glass-card-hover p-3 sm:p-4 relative overflow-hidden dark">
+          <div className="glass-card-hover p-3 sm:p-4 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 to-indigo-500/10 rounded-xl -z-10"></div>
             <div className="flex items-center space-x-3 sm:space-x-4">
               <div className="p-2 sm:p-3 bg-blue-900/30 rounded-lg sm:rounded-xl flex-shrink-0">
@@ -91,7 +91,7 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
             </div>
           </div>
           
-          <div className="glass-card-hover p-3 sm:p-4 relative overflow-hidden dark">
+          <div className="glass-card-hover p-3 sm:p-4 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-purple-400/10 to-pink-500/10 rounded-xl -z-10"></div>
             <div className="flex items-center space-x-3 sm:space-x-4">
               <div className="p-2 sm:p-3 bg-purple-900/30 rounded-lg sm:rounded-xl flex-shrink-0">
@@ -114,7 +114,7 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
             </div>
           </div>
           
-          <div className="glass-card-hover p-3 sm:p-4 relative overflow-hidden dark">
+          <div className="glass-card-hover p-3 sm:p-4 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-green-400/10 to-emerald-500/10 rounded-xl -z-10"></div>
             <div className="flex items-center space-x-3 sm:space-x-4">
               <div className="p-2 sm:p-3 bg-green-900/30 rounded-lg sm:rounded-xl flex-shrink-0">
@@ -131,7 +131,7 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
         </div>
 
         {/* Total Amount */}
-        <div className="glass-card-hover p-3 sm:p-4 dark">
+        <div className="glass-card-hover p-3 sm:p-4">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-indigo-500/20 rounded-xl -z-10"></div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
             <div className="flex items-center space-x-3 sm:space-x-4">
@@ -159,7 +159,7 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
       </div>
 
       {/* Line Items Table */}
-      <div className="glass-card p-3 sm:p-4 lg:p-6 dark">
+      <div className="glass-card p-3 sm:p-4 lg:p-6">
         <div className="flex items-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
           <div className="p-2 bg-indigo-900/30 rounded-lg">
             <Package className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400" />

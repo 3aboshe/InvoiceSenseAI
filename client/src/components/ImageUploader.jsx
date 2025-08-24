@@ -18,7 +18,7 @@ const ImageUploader = ({ onUpload, isLoading, error }) => {
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* Main Upload Area */}
-      <div className="glass-card p-4 sm:p-6 lg:p-8 dark">
+      <div className="glass-card p-4 sm:p-6 lg:p-8">
         <div
           {...getRootProps()}
           className={`
@@ -92,7 +92,7 @@ const ImageUploader = ({ onUpload, isLoading, error }) => {
 
               {/* Error Display */}
         {error && (
-          <div className="glass-card p-4 bg-red-900/20 border border-red-800 dark">
+          <div className="glass-card p-4 bg-red-900/20 border border-red-800">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-red-900/50 rounded-lg">
                 <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
