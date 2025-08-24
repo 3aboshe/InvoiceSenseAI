@@ -90,14 +90,18 @@ const Dashboard = () => {
   const loadAnalytics = async () => {
     setLoading(true);
     try {
+      console.log('Loading analytics data...');
       // Use relative URL since API is on the same domain
       const response = await fetch(`/api/analytics?range=${timeRange}`);
+      
+      console.log('Analytics response status:', response.status);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
       const responseData = await response.json();
+      console.log('Analytics response data:', responseData);
       
       if (responseData.success) {
         // Transform the API response to match our component structure
@@ -112,13 +116,16 @@ const Dashboard = () => {
           invoiceCategories: responseData.data.invoiceCategories || mockAnalytics.invoiceCategories,
           recentActivity: responseData.data.recentActivity || mockAnalytics.recentActivity
         };
+        console.log('Setting analytics data:', transformedData);
         setAnalytics(transformedData);
       } else {
+        console.log('API returned success: false, using mock data');
         // Fallback to mock data if API fails
         setAnalytics(mockAnalytics);
       }
     } catch (error) {
       console.error('Error loading analytics:', error);
+      console.log('Using mock data due to error');
       // Fallback to mock data on error
       setAnalytics(mockAnalytics);
     } finally {
@@ -158,6 +165,22 @@ const Dashboard = () => {
               <div className="h-80 bg-slate-700 rounded-xl"></div>
               <div className="h-80 bg-slate-700 rounded-xl"></div>
             </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Ensure we always have data to render
+  if (!analytics) {
+    console.log('No analytics data, using mock data');
+    setAnalytics(mockAnalytics);
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center py-20">
+            <h1 className="text-2xl font-bold text-white mb-4">Loading Dashboard...</h1>
+            <p className="text-slate-400">Please wait while we load your analytics data.</p>
           </div>
         </div>
       </div>
