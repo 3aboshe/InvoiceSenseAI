@@ -1,4 +1,4 @@
-# Ahmed Qanadr AI - Invoice Extractor
+# InvoiceSense AI
 
 A modern, AI-powered invoice data extraction application with a beautiful Apple-inspired interface.
 
@@ -38,7 +38,7 @@ A modern, AI-powered invoice data extraction application with a beautiful Apple-
 1. **Clone the repository**
    ```bash
    git clone <your-repo-url>
-   cd invoice-extractor-app
+   cd invoicesense-ai
    ```
 
 2. **Install dependencies**
@@ -139,7 +139,7 @@ This project is licensed under the MIT License.
 
 ## 👨‍💻 Author
 
-**Ahmed Qanadr** - AI-powered invoice extraction solution
+**Ahmed Qanadr** - InvoiceSense AI
 
 ---
 

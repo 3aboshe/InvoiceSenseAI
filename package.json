@@ -1,7 +1,7 @@
 {
-  "name": "ahmed-qanadr-ai-invoice-extractor",
+  "name": "invoicesense-ai",
   "version": "1.0.0",
-  "description": "AI-powered invoice data extraction application with beautiful Apple-inspired interface",
+  "description": "InvoiceSense AI - Intelligent invoice data extraction with beautiful Apple-inspired interface",
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
@@ -28,7 +28,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/ahmed-qanadr-ai-invoice-extractor.git"
+    "url": "https://github.com/yourusername/invoicesense-ai.git"
   },
   "engines": {
     "node": ">=18.0.0"
