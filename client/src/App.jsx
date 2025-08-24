@@ -39,17 +39,17 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Simple Header */}
-      <header className="mx-6 mt-6 mb-4">
+      <header className="mx-4 sm:mx-6 mt-4 sm:mt-6 mb-3 sm:mb-4">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg">
-              <Sparkles className="w-5 h-5 text-white" />
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <div className="p-1.5 sm:p-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg">
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">
-                Ahmed Qanadr AI
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
+                InvoiceSense AI
               </h1>
-              <p className="text-slate-600 text-sm">
+              <p className="text-slate-600 text-xs sm:text-sm">
                 AI-powered invoice data extraction
               </p>
             </div>
@@ -58,7 +58,7 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 px-6 pb-4">
+      <main className="flex-1 px-4 sm:px-6 pb-4">
         <div className="max-w-6xl mx-auto space-y-2">
           {/* Upload Section */}
           <div className="slide-up">
