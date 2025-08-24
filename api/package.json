@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "API dependencies for InvoiceSense AI",
   "dependencies": {
-    "groq-sdk": "^0.3.0",
+    "groq-sdk": "^0.7.0",
     "airtable": "^0.12.2",
     "multer": "^1.4.5-lts.1"
   }

@@ -1,7 +1,13 @@
-const Airtable = require('airtable');
+// API export endpoint for InvoiceSense AI
+let Airtable;
+try {
+  Airtable = require('airtable');
+} catch (error) {
+  console.warn('Airtable module not found, using mock data');
+}
 
 // Initialize Airtable client
-const base = process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID 
+const base = process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID && Airtable
   ? new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID)
   : null;
 

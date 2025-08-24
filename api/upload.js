@@ -1,17 +1,25 @@
-const multer = require('multer');
-const { Groq } = require('groq-sdk');
-const Airtable = require('airtable');
+// API upload endpoint for InvoiceSense AI
+let multer, Groq, Airtable;
+try {
+  multer = require('multer');
+  Groq = require('groq-sdk').Groq;
+  Airtable = require('airtable');
+} catch (error) {
+  console.warn('Some modules not found:', error.message);
+}
 
 // Initialize Groq client
-const groq = new Groq({
+const groq = process.env.GROQ_API_KEY && Groq ? new Groq({
   apiKey: process.env.GROQ_API_KEY,
-});
+}) : null;
 
 // Initialize Airtable client
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
+const base = process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID && Airtable
+  ? new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID)
+  : null;
 
 // Configure multer for in-memory file storage
-const upload = multer({
+const upload = multer ? multer({
   storage: multer.memoryStorage(),
   limits: {
     fileSize: 10 * 1024 * 1024, // 10MB limit
@@ -23,7 +31,7 @@ const upload = multer({
       cb(new Error('Only image files are allowed'), false);
     }
   },
-});
+}) : null;
 
 // Helper function to convert buffer to base64
 const bufferToBase64 = (buffer) => {
@@ -272,10 +280,19 @@ module.exports = async function handler(req, res) {
 
   try {
     // Check if API keys are configured
-    if (!process.env.GROQ_API_KEY || !process.env.AIRTABLE_API_KEY) {
+    if (!groq) {
       return res.status(503).json({
         success: false,
-        error: 'API keys not configured. Please set up GROQ_API_KEY, AIRTABLE_API_KEY, AIRTABLE_BASE_ID, and AIRTABLE_TABLE_NAME in your environment variables.',
+        error: 'Groq API not configured. Please set up GROQ_API_KEY in your environment variables.',
+        demo: true
+      });
+    }
+
+    // Check if multer is available
+    if (!upload) {
+      return res.status(503).json({
+        success: false,
+        error: 'File upload service not available',
         demo: true
       });
     }
