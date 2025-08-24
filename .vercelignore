@@ -1,0 +1,10 @@
+server/
+.env
+.env.local
+.env.production
+.env.development
+node_modules/
+.git/
+.next/
+.deployment_log
+DEPLOYMENT_TRIGGER.md
