@@ -1,4 +1,4 @@
-# Ahmed Qanadr AI - Invoice Extractor
+# InvoiceSenseAI
 
 A modern, AI-powered invoice data extraction application with a beautiful Apple-inspired interface.
 
