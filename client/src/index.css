@@ -14,14 +14,17 @@
 }
 
 @layer components {
-  /* Glass Card Effect */
+  /* Light Mode Glass Card Effect */
   .glass-card {
-    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl;
+    @apply bg-white/80 backdrop-blur-xl border border-slate-200/50 shadow-xl;
+    @apply bg-gradient-to-br from-white/90 to-slate-50/80;
   }
   
   .glass-card-hover {
-    @apply bg-white/80 backdrop-blur-xl border border-white/30 shadow-lg transition-all duration-300;
-    @apply hover:bg-white/90 hover:shadow-xl hover:scale-[1.02];
+    @apply bg-white/90 backdrop-blur-xl border border-slate-300/60 shadow-lg transition-all duration-300;
+    @apply hover:bg-white hover:shadow-2xl hover:scale-[1.02] hover:border-slate-400/80;
+    @apply bg-gradient-to-br from-white/95 to-slate-50/90;
+    @apply hover:from-white hover:to-blue-50/30;
   }
   
   /* Button Styles */
@@ -33,52 +36,62 @@
   }
   
   .btn-secondary {
-    @apply bg-white/80 backdrop-blur-xl border border-slate-200 text-slate-700 font-medium px-6 py-3 rounded-xl;
-    @apply hover:bg-white/90 hover:border-slate-300 transition-all duration-200;
+    @apply bg-white/90 backdrop-blur-xl border border-slate-200 text-slate-700 font-medium px-6 py-3 rounded-xl;
+    @apply hover:bg-white hover:border-slate-300 transition-all duration-200;
     @apply focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2;
     @apply shadow-lg hover:shadow-xl;
   }
   
-  /* Dropzone Styles */
+  /* Light Mode Dropzone Styles */
   .dropzone {
     @apply border-2 border-dashed border-slate-300 rounded-2xl p-8 cursor-pointer;
-    @apply hover:border-blue-400 hover:bg-blue-50/50 transition-all duration-300;
+    @apply hover:border-blue-400 hover:bg-gradient-to-br hover:from-blue-50/50 hover:to-indigo-50/30 transition-all duration-300;
+    @apply bg-gradient-to-br from-white/80 to-slate-50/60;
   }
   
   .dropzone-active {
-    @apply border-blue-500 bg-blue-50/80;
+    @apply border-blue-500 bg-gradient-to-br from-blue-50/80 to-indigo-50/60;
   }
   
-  /* Table Row Styles */
+  /* Light Mode Table Row Styles */
   .table-row {
-    @apply hover:bg-slate-50/50 transition-colors duration-200;
+    @apply hover:bg-gradient-to-r hover:from-slate-50/80 hover:to-blue-50/40 transition-colors duration-200;
   }
   
-  /* Dark Mode Overrides */
+  /* Dark Mode Glass Card Effect */
   .dark .glass-card {
-    @apply bg-slate-800/70 border-slate-700/20;
+    @apply bg-slate-800/80 backdrop-blur-xl border-slate-600/40 shadow-xl;
+    @apply bg-gradient-to-br from-slate-800/90 to-slate-900/80;
   }
   
   .dark .glass-card-hover {
-    @apply bg-slate-800/80 border-slate-700/30;
-    @apply hover:bg-slate-800/90;
+    @apply bg-slate-800/90 backdrop-blur-xl border-slate-500/50 shadow-lg transition-all duration-300;
+    @apply hover:bg-slate-800 hover:shadow-2xl hover:scale-[1.02] hover:border-slate-400/60;
+    @apply bg-gradient-to-br from-slate-800/95 to-slate-900/90;
+    @apply hover:from-slate-800 hover:to-indigo-900/30;
   }
   
   .dark .btn-secondary {
-    @apply bg-slate-700/80 border-slate-600 text-slate-200;
-    @apply hover:bg-slate-700/90 hover:border-slate-500;
+    @apply bg-slate-700/90 backdrop-blur-xl border-slate-600 text-slate-200 font-medium px-6 py-3 rounded-xl;
+    @apply hover:bg-slate-700 hover:border-slate-500 transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2;
+    @apply shadow-lg hover:shadow-xl;
   }
   
+  /* Dark Mode Dropzone Styles */
   .dark .dropzone {
-    @apply border-slate-600 hover:border-blue-400 hover:bg-blue-900/20;
+    @apply border-slate-600 hover:border-blue-400;
+    @apply hover:bg-gradient-to-br hover:from-slate-800/80 hover:to-indigo-900/40 transition-all duration-300;
+    @apply bg-gradient-to-br from-slate-800/80 to-slate-900/60;
   }
   
   .dark .dropzone-active {
-    @apply border-blue-500 bg-blue-900/30;
+    @apply border-blue-500 bg-gradient-to-br from-slate-800/80 to-indigo-900/60;
   }
   
+  /* Dark Mode Table Row Styles */
   .dark .table-row {
-    @apply hover:bg-slate-700/50;
+    @apply hover:bg-gradient-to-r hover:from-slate-700/80 hover:to-indigo-900/40 transition-colors duration-200;
   }
 }
 

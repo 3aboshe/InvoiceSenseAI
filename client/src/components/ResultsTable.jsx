@@ -76,7 +76,8 @@ const ResultsTable = ({ data, darkMode, autoConvertCurrency }) => {
 
         {/* Invoice Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
-          <div className={`glass-card-hover p-3 sm:p-4 ${darkMode ? 'dark' : ''}`}>
+          <div className={`glass-card-hover p-3 sm:p-4 relative overflow-hidden ${darkMode ? 'dark' : ''}`}>
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-600/5 dark:from-blue-400/10 dark:to-indigo-500/10 rounded-xl -z-10"></div>
             <div className="flex items-center space-x-3 sm:space-x-4">
               <div className="p-2 sm:p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg sm:rounded-xl flex-shrink-0">
                 <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 dark:text-blue-400" />
@@ -90,7 +91,8 @@ const ResultsTable = ({ data, darkMode, autoConvertCurrency }) => {
             </div>
           </div>
           
-          <div className={`glass-card-hover p-3 sm:p-4 ${darkMode ? 'dark' : ''}`}>
+          <div className={`glass-card-hover p-3 sm:p-4 relative overflow-hidden ${darkMode ? 'dark' : ''}`}>
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-600/5 dark:from-purple-400/10 dark:to-pink-500/10 rounded-xl -z-10"></div>
             <div className="flex items-center space-x-3 sm:space-x-4">
               <div className="p-2 sm:p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg sm:rounded-xl flex-shrink-0">
                 <User className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600 dark:text-purple-400" />
@@ -112,7 +114,8 @@ const ResultsTable = ({ data, darkMode, autoConvertCurrency }) => {
             </div>
           </div>
           
-          <div className={`glass-card-hover p-3 sm:p-4 ${darkMode ? 'dark' : ''}`}>
+          <div className={`glass-card-hover p-3 sm:p-4 relative overflow-hidden ${darkMode ? 'dark' : ''}`}>
+            <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-600/5 dark:from-green-400/10 dark:to-emerald-500/10 rounded-xl -z-10"></div>
             <div className="flex items-center space-x-3 sm:space-x-4">
               <div className="p-2 sm:p-3 bg-green-100 dark:bg-green-900/30 rounded-lg sm:rounded-xl flex-shrink-0">
                 <Package className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 dark:text-green-400" />
@@ -128,7 +131,8 @@ const ResultsTable = ({ data, darkMode, autoConvertCurrency }) => {
         </div>
 
         {/* Total Amount */}
-        <div className={`glass-card-hover p-3 sm:p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200/50 dark:border-blue-800/50 ${darkMode ? 'dark' : ''}`}>
+        <div className={`glass-card-hover p-3 sm:p-4 ${darkMode ? 'dark' : ''}`}>
+          <div className={`absolute inset-0 bg-gradient-to-r from-blue-500/10 to-indigo-600/10 dark:from-blue-400/20 dark:to-indigo-500/20 rounded-xl -z-10`}></div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
             <div className="flex items-center space-x-3 sm:space-x-4">
               <div className="p-2 sm:p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg sm:rounded-xl">
