@@ -15,30 +15,12 @@
   ],
   "routes": [
     {
-      "src": "/api/upload",
-      "dest": "/api/upload"
-    },
-    {
-      "src": "/api/analytics",
-      "dest": "/api/analytics"
-    },
-    {
-      "src": "/api/health",
-      "dest": "/api/health"
-    },
-    {
       "src": "/api/(.*)",
       "dest": "/api/$1"
     },
     {
       "src": "/(.*)",
       "dest": "/client/dist/index.html"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/((?!api/).*)",
-      "destination": "/client/dist/index.html"
     }
   ]
 }
