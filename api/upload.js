@@ -40,7 +40,49 @@ const extractTextFromImage = async (base64Image) => {
           content: [
             {
               type: "text",
-              text: "Transcribe all text from this invoice image verbatim. Include line items, totals, company names, dates, and any other text present. The output should be a raw text dump."
+              text: `You are an EXPERT invoice reader with 20+ years of experience in document processing, OCR, and financial data extraction. You can read ANY type of invoice including:
+
+CRITICAL CAPABILITIES:
+- Handwritten invoices (cursive, print, messy handwriting)
+- Printed invoices (any font, size, orientation)
+- Scanned documents (low quality, blurry, rotated)
+- Digital invoices (PDFs, screenshots, photos)
+- Multi-language invoices (Arabic, English, numbers in any format)
+- Damaged or partially visible invoices
+- Invoices with complex layouts, tables, and formatting
+
+EXTRACTION REQUIREMENTS:
+1. Read EVERY single character, number, and symbol visible
+2. Preserve exact formatting and layout structure
+3. Handle currency symbols (USD, IQD, د.ع, $, €, £, etc.)
+4. Recognize handwritten numbers and text accurately
+5. Extract dates in any format (DD/MM/YYYY, MM-DD-YY, etc.)
+6. Identify company names, addresses, phone numbers, emails
+7. Capture all line items with descriptions, quantities, prices
+8. Read totals, subtotals, taxes, discounts, shipping costs
+9. Handle mathematical calculations and currency conversions
+10. Preserve invoice numbers, reference numbers, PO numbers
+
+SPECIAL INSTRUCTIONS:
+- If text is unclear, make your best educated guess based on context
+- For handwritten text, use context clues to improve accuracy
+- Maintain original spelling even if it appears incorrect
+- Include ALL visible text, even if it seems irrelevant
+- Preserve decimal places and number formatting exactly
+- Handle both Arabic and English text seamlessly
+- Recognize common invoice terms in multiple languages
+
+OUTPUT FORMAT:
+Provide a COMPLETE, VERBATIM transcription of ALL text visible in the invoice image. Include:
+- Header information (company details, contact info)
+- Invoice metadata (number, date, due date, terms)
+- Customer/client information
+- Line items with full descriptions
+- All numerical values (quantities, prices, totals)
+- Footer information (terms, notes, signatures)
+- Any handwritten notes or additions
+
+Be EXTREMELY thorough - leave nothing out. Your accuracy is critical for financial data processing.`
             },
             {
               type: "image_url",
@@ -69,33 +111,57 @@ const structureTextToJSON = async (rawText) => {
       messages: [
         {
           role: "user",
-          content: `You are an expert invoice data extractor. Analyze the following invoice text and extract structured data. 
+          content: `You are a MASTER invoice data analyst with expertise in financial document processing, OCR, and data extraction. Your task is to analyze the following invoice text and extract structured data with EXTREME accuracy.
 
-IMPORTANT: Return ONLY a valid JSON object with this exact structure:
+CRITICAL EXTRACTION CAPABILITIES:
+- Handle handwritten and printed text seamlessly
+- Recognize numbers in any format (1,234.56, ١٢٣٤٫٥٦, etc.)
+- Process multi-language content (Arabic, English, mixed)
+- Extract from complex layouts and tables
+- Handle damaged or unclear text with context clues
+- Recognize various currency formats and symbols
+- Process mathematical calculations and totals
+
+REQUIRED JSON STRUCTURE:
 {
-  "client_id": "extracted client ID or customer number",
-  "company": "extracted company/vendor name", 
+  "client_id": "extracted client ID, customer number, or account number",
+  "company": "extracted company/vendor/business name",
   "line_items": [
     {
-      "description": "item description",
-      "quantity": "quantity as number",
-      "unit_price": "unit price as number",
-      "amount": "total amount for this item as number",
-      "currency": "USD or IQD or د.ع"
+      "description": "complete item description or service name",
+      "quantity": "quantity as number (handle fractions, decimals)",
+      "unit_price": "unit price as number (handle currency symbols)",
+      "amount": "total amount for this line item as number",
+      "currency": "currency code (USD, IQD, د.ع, $, etc.)"
     }
   ]
 }
 
-Rules:
-- Extract ALL line items from the invoice
-- Use "amount" field for the total price of each line item
-- If currency is not specified, default to "USD"
-- If client_id is not found, use "N/A"
-- If company is not found, use "N/A"
-- Ensure all numbers are numeric values, not strings
-- Return ONLY the JSON object, no other text
+EXTRACTION RULES:
+1. CLIENT_ID: Look for customer ID, account number, client number, reference number, or any unique identifier
+2. COMPANY: Extract the vendor/supplier/company name issuing the invoice
+3. LINE_ITEMS: Extract EVERY line item with complete details
+4. QUANTITY: Convert to numeric value (handle "1", "1.5", "2.25", etc.)
+5. UNIT_PRICE: Extract per-unit cost as numeric value
+6. AMOUNT: Calculate or extract total for each line item
+7. CURRENCY: Identify currency from symbols, text, or context
 
-Invoice text:
+SPECIAL HANDLING:
+- For handwritten text: Use context and common patterns to improve accuracy
+- For unclear numbers: Make educated guesses based on totals and context
+- For missing data: Use "N/A" or reasonable defaults
+- For currency: Default to "USD" if unclear, but prefer detected currency
+- For calculations: Verify math and correct obvious errors
+- For descriptions: Preserve original text even if unclear
+
+QUALITY REQUIREMENTS:
+- Be EXTREMELY thorough - extract every possible line item
+- Maintain accuracy for financial calculations
+- Handle edge cases and unusual formats
+- Preserve original data integrity
+- Return ONLY valid JSON - no additional text or explanations
+
+Invoice text to analyze:
 ${rawText}`
         }
       ],
