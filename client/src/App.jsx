@@ -29,8 +29,7 @@ function AppContent() {
       const formData = new FormData()
       formData.append('image', file)
   
-      const API_URL = import.meta.env.VITE_API_URL || '';
-      const response = await fetch(`${API_URL}/api/upload`, {
+      const response = await fetch(`/api/upload`, {
         method: 'POST',
         body: formData,
       })

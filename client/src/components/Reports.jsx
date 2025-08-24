@@ -90,10 +90,9 @@ const Reports = () => {
   const generateReport = async () => {
     setLoading(true);
     try {
-      const API_URL = import.meta.env.VITE_API_URL || '';
       const { start, end } = getDateRangeValues();
       
-      let url = `${API_URL}/api/reports?type=${reportType}&range=${dateRange}`;
+      let url = `/api/reports?type=${reportType}&range=${dateRange}`;
       
       if (dateRange === 'custom' && customStartDate && customEndDate) {
         url += `&startDate=${customStartDate}&endDate=${customEndDate}`;
@@ -204,13 +203,12 @@ const Reports = () => {
       
       if (format === 'csv') {
         // Use the backend CSV export API
-        const API_URL = import.meta.env.VITE_API_URL || '';
         let exportType = reportType;
         
         // Map report types to export types
         if (reportType === 'analytics') exportType = 'revenue';
         
-        const url = `${API_URL}/api/export?type=${exportType}&range=${dateRange}`;
+        const url = `/api/export?type=${exportType}&range=${dateRange}`;
         
         // Create a temporary link and click it to download
         const link = document.createElement('a');

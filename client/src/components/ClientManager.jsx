@@ -85,8 +85,7 @@ const ClientManager = () => {
   const loadClients = async () => {
     setLoading(true);
     try {
-      const API_URL = import.meta.env.VITE_API_URL || '';
-      const response = await fetch(`${API_URL}/api/clients`);
+      const response = await fetch(`/api/clients`);
       
       if (response.ok) {
         const responseData = await response.json();
@@ -108,8 +107,7 @@ const ClientManager = () => {
 
   const handleAddClient = async (clientData) => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || '';
-      const response = await fetch(`${API_URL}/api/clients`, {
+      const response = await fetch(`/api/clients`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

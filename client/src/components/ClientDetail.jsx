@@ -122,8 +122,7 @@ const ClientDetail = () => {
   const loadClientData = async () => {
     setLoading(true);
     try {
-      const API_URL = import.meta.env.VITE_API_URL || '';
-      const response = await fetch(`${API_URL}/api/clients?id=${clientId}`);
+      const response = await fetch(`/api/clients?id=${clientId}`);
       
       if (response.ok) {
         const responseData = await response.json();

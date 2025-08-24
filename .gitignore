@@ -99,3 +99,5 @@ Thumbs.db
 
 # Server logs
 server.log
+.vercel
+.env*.local

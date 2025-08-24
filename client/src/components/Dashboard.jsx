@@ -90,8 +90,8 @@ const Dashboard = () => {
   const loadAnalytics = async () => {
     setLoading(true);
     try {
-      const API_URL = import.meta.env.VITE_API_URL || '';
-      const response = await fetch(`${API_URL}/api/analytics?range=${timeRange}`);
+      // Use relative URL since API is on the same domain
+      const response = await fetch(`/api/analytics?range=${timeRange}`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
