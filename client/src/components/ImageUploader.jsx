@@ -43,7 +43,7 @@ const ImageUploader = ({ onUpload, isLoading, error, darkMode }) => {
                 </div>
               </div>
               <div className="space-y-2 sm:space-y-3">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent text-center dark:from-white dark:to-slate-300">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-slate-900 dark:text-white text-center">
                   Processing Your Invoice
                 </h3>
                 <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base lg:text-lg text-center">
@@ -65,7 +65,7 @@ const ImageUploader = ({ onUpload, isLoading, error, darkMode }) => {
                 </div>
               </div>
               <div className="space-y-2 sm:space-y-3">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent text-center dark:from-white dark:to-slate-300">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-slate-900 dark:text-white text-center">
                   {isDragActive ? 'Drop your invoice here' : 'Upload Invoice Image'}
                 </h3>
                 <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base lg:text-lg text-center">

@@ -53,7 +53,7 @@ const ResultsTable = ({ data, darkMode, autoConvertCurrency }) => {
             <CheckCircle className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
           </div>
           <div>
-            <h2 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent dark:from-white dark:to-slate-300">
+            <h2 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-slate-900 dark:text-white">
               Invoice Processed Successfully
             </h2>
             <p className="text-slate-600 dark:text-slate-400 mt-1 text-xs sm:text-sm">
