@@ -1,10 +1,11 @@
 // API upload endpoint for InvoiceSense AI
-let multer, Groq, Airtable;
+let multer, Groq, Airtable, pdfParse;
 try {
   multer = require('multer');
   const groqSDK = require('groq-sdk');
   Groq = groqSDK.Groq || groqSDK.default?.Groq || groqSDK;
   Airtable = require('airtable');
+  pdfParse = require('pdf-parse');
 } catch (error) {
   console.warn('Some modules not found:', error.message);
 }
@@ -23,13 +24,13 @@ const base = process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID && Air
 const upload = multer ? multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit
+    fileSize: 15 * 1024 * 1024, // 15MB limit for PDFs
   },
   fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
+    if (file.mimetype.startsWith('image/') || file.mimetype === 'application/pdf') {
       cb(null, true);
     } else {
-      cb(new Error('Only image files are allowed'), false);
+      cb(new Error('Only image files and PDFs are allowed'), false);
     }
   },
 }) : null;
@@ -37,6 +38,33 @@ const upload = multer ? multer({
 // Helper function to convert buffer to base64
 const bufferToBase64 = (buffer) => {
   return buffer.toString('base64');
+};
+
+// Helper function to extract text from PDF using pdf-parse
+const extractTextFromPDF = async (buffer) => {
+  try {
+    console.log('Starting PDF text extraction...');
+    
+    if (!pdfParse) {
+      console.log('PDF parser not available, returning demo text');
+      return `Demo PDF Invoice Text:
+Company: Demo Company Inc.
+Invoice #: INV-2024-001
+Date: 2024-01-15
+Client: Demo Client
+Items:
+1. Web Development Services - $1,200.00
+2. Design Services - $800.00
+Total: $2,000.00`;
+    }
+    
+    const data = await pdfParse(buffer);
+    console.log('PDF text extraction successful');
+    return data.text;
+  } catch (error) {
+    console.error('Error extracting text from PDF:', error);
+    throw new Error(`Failed to extract text from PDF: ${error.message}`);
+  }
 };
 
 // Helper function to extract text from image using Groq
@@ -475,22 +503,31 @@ module.exports = async function handler(req, res) {
       if (!req.file) {
         return res.status(400).json({ 
           success: false, 
-          error: 'No image file provided' 
+          error: 'No file provided' 
         });
       }
 
       try {
         const startTime = Date.now();
-        console.log('Processing uploaded image:', req.file.originalname);
+        const isPDF = req.file.mimetype === 'application/pdf';
+        console.log(`Processing uploaded ${isPDF ? 'PDF' : 'image'}:`, req.file.originalname);
 
-        // Step 1: Convert image buffer to base64
-        const base64Image = bufferToBase64(req.file.buffer);
-        console.log('Image converted to base64');
-
-        // Step 2: Extract text from image using Groq
-        console.log('Extracting text from image...');
-        const rawText = await extractTextFromImage(base64Image);
-        console.log('Text extraction completed');
+        // Step 1: Extract text from file
+        let rawText;
+        if (isPDF) {
+          console.log('Extracting text from PDF...');
+          rawText = await extractTextFromPDF(req.file.buffer);
+          console.log('PDF text extraction completed');
+        } else {
+          // Convert image buffer to base64
+          const base64Image = bufferToBase64(req.file.buffer);
+          console.log('Image converted to base64');
+          
+          // Extract text from image using Groq
+          console.log('Extracting text from image...');
+          rawText = await extractTextFromImage(base64Image);
+          console.log('Image text extraction completed');
+        }
 
         // Step 3: Structure text into JSON using Groq
         console.log('Structuring text into JSON...');

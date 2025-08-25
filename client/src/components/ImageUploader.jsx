@@ -1,11 +1,12 @@
 import React from 'react'
 import { useDropzone } from 'react-dropzone'
-import { Upload, Camera, FileText, Sparkles, Loader2 } from 'lucide-react'
+import { Upload, Camera, FileText, Sparkles, Loader2, File } from 'lucide-react'
 
 const ImageUploader = ({ onUpload, isLoading, error }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
-      'image/*': ['.jpeg', '.jpg', '.png', '.gif']
+      'image/*': ['.jpeg', '.jpg', '.png', '.gif'],
+      'application/pdf': ['.pdf']
     },
     multiple: false,
     onDrop: (acceptedFiles) => {
@@ -66,18 +67,22 @@ const ImageUploader = ({ onUpload, isLoading, error }) => {
               </div>
               <div className="space-y-2 sm:space-y-3">
                 <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white text-center">
-                  {isDragActive ? 'Drop your invoice here' : 'Upload Invoice Image'}
+                  {isDragActive ? 'Drop your invoice here' : 'Upload Invoice'}
                 </h3>
                 <p className="text-slate-400 text-sm sm:text-base lg:text-lg text-center">
                   {isDragActive 
                     ? 'Release to upload and process your invoice' 
-                    : 'Drag & drop an invoice image, or click to browse'
+                    : 'Drag & drop an invoice image or PDF, or click to browse'
                   }
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-6 text-xs sm:text-sm text-slate-400">
                   <div className="flex items-center space-x-2">
                     <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span>JPEG, PNG, GIF</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <File className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span>PDF</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
