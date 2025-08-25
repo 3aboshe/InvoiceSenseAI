@@ -76,9 +76,9 @@ function AppContent() {
   }
 
   const Navigation = () => (
-    <nav className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700">
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
-        <div className="flex items-center justify-between h-14 sm:h-16">
+    <nav className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700 w-full overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 w-full">
+        <div className="flex items-center justify-between h-14 sm:h-16 w-full">
           {/* Logo and Title */}
           <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3">
             <div className="p-1 sm:p-1.5 lg:p-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg">
@@ -92,8 +92,8 @@ function AppContent() {
           </div>
           
           {/* Navigation Buttons */}
-          <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4">
-            <div className="flex items-center space-x-0.5 sm:space-x-1 bg-slate-700 rounded-lg p-0.5 sm:p-1">
+          <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4 flex-shrink-0">
+            <div className="flex items-center space-x-0.5 sm:space-x-1 bg-slate-700 rounded-lg p-0.5 sm:p-1 flex-shrink-0">
               <button
                 onClick={() => navigate('/dashboard')}
                 className={`px-1.5 sm:px-2 lg:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors flex items-center space-x-1 sm:space-x-2 ${
@@ -194,7 +194,7 @@ function AppContent() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-x-hidden">
       <Navigation />
       <Routes>
         <Route path="/" element={<UploadPage />} />
