@@ -282,37 +282,71 @@ ${rawText}`
 // Helper function to save data to Airtable with enhanced tracking
 const saveToAirtable = async (parsedData, metadata = {}) => {
   try {
+    console.log('Starting Airtable save process...');
+    console.log('Airtable configuration:', {
+      hasBase: !!base,
+      hasApiKey: !!process.env.AIRTABLE_API_KEY,
+      hasBaseId: !!process.env.AIRTABLE_BASE_ID,
+      hasTableName: !!process.env.AIRTABLE_TABLE_NAME,
+      tableName: process.env.AIRTABLE_TABLE_NAME
+    });
+    
     const { client_id, company, line_items } = parsedData;
     const { userId, processingTime, originalFilename } = metadata;
     
+    if (!base) {
+      console.log('Airtable base not configured, skipping save');
+      return {
+        records: [],
+        invoiceNumber: `INV-${Date.now().toString().slice(-8)}`,
+        clientId: client_id,
+        skipped: true,
+        reason: 'Airtable not configured'
+      };
+    }
+    
+    if (!process.env.AIRTABLE_TABLE_NAME) {
+      console.log('Airtable table name not configured, skipping save');
+      return {
+        records: [],
+        invoiceNumber: `INV-${Date.now().toString().slice(-8)}`,
+        clientId: client_id,
+        skipped: true,
+        reason: 'Table name not configured'
+      };
+    }
+    
     // Check if client exists, if not create one
     let clientRecord = null;
-    if (base) {
-      try {
-        const existingClients = await base('Clients').select({
-          filterByFormula: `OR({Name} = '${company}', {Email} = '${company}')`
-        }).firstPage();
-        
-        if (existingClients.length > 0) {
-          clientRecord = existingClients[0];
-        } else {
-          // Create new client
-          clientRecord = await base('Clients').create({
-            'Name': company,
-            'Client ID': client_id,
-            'Status': 'active',
-            'Join Date': new Date().toISOString().split('T')[0],
-            'Industry': 'Unknown',
-            'Notes': `Auto-created from invoice processing on ${new Date().toISOString()}`
-          });
-        }
-      } catch (clientError) {
-        console.warn('Could not create/find client, continuing with invoice creation:', clientError);
+    try {
+      console.log('Checking for existing client:', company);
+      const existingClients = await base('Clients').select({
+        filterByFormula: `OR({Name} = '${company}', {Email} = '${company}')`
+      }).firstPage();
+      
+      if (existingClients.length > 0) {
+        clientRecord = existingClients[0];
+        console.log('Found existing client:', clientRecord.id);
+      } else {
+        // Create new client
+        console.log('Creating new client:', company);
+        clientRecord = await base('Clients').create({
+          'Name': company,
+          'Client ID': client_id,
+          'Status': 'active',
+          'Join Date': new Date().toISOString().split('T')[0],
+          'Industry': 'Unknown',
+          'Notes': `Auto-created from invoice processing on ${new Date().toISOString()}`
+        });
+        console.log('Created new client:', clientRecord.id);
       }
+    } catch (clientError) {
+      console.warn('Could not create/find client, continuing with invoice creation:', clientError);
     }
     
     // Generate invoice number
     const invoiceNumber = `INV-${Date.now().toString().slice(-8)}`;
+    console.log('Generated invoice number:', invoiceNumber);
     
     // Create records for each line item with enhanced data
     const records = line_items.map((item, index) => ({
@@ -334,8 +368,13 @@ const saveToAirtable = async (parsedData, metadata = {}) => {
       }
     }));
 
+    console.log('Creating records in table:', process.env.AIRTABLE_TABLE_NAME);
+    console.log('Records to create:', records.length);
+    
     // Insert records into Airtable
     const createdRecords = await base(process.env.AIRTABLE_TABLE_NAME).create(records);
+    
+    console.log('Successfully created records:', createdRecords.length);
     
     return {
       records: createdRecords,
@@ -344,7 +383,21 @@ const saveToAirtable = async (parsedData, metadata = {}) => {
     };
   } catch (error) {
     console.error('Error saving to Airtable:', error);
-    throw new Error('Failed to save data to Airtable');
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      status: error.status,
+      response: error.response?.data
+    });
+    
+    // Return a result indicating the save failed but don't throw
+    return {
+      records: [],
+      invoiceNumber: `INV-${Date.now().toString().slice(-8)}`,
+      clientId: parsedData.client_id,
+      error: error.message,
+      failed: true
+    };
   }
 };
 
@@ -450,26 +503,30 @@ module.exports = async function handler(req, res) {
         let savedResult = null;
         let airtableMessage = '';
         
-        if (base) {
-          try {
-            console.log('Saving data to Airtable...');
-            const metadata = {
-              processingTime,
-              originalFilename: req.file.originalname,
-              userId: req.headers['x-user-id'] || 'anonymous', // Frontend can send user ID
-              fileSize: req.file.size
-            };
-            
-            savedResult = await saveToAirtable(parsedData, metadata);
+        try {
+          console.log('Saving data to Airtable...');
+          const metadata = {
+            processingTime,
+            originalFilename: req.file.originalname,
+            userId: req.headers['x-user-id'] || 'anonymous', // Frontend can send user ID
+            fileSize: req.file.size
+          };
+          
+          savedResult = await saveToAirtable(parsedData, metadata);
+          
+          if (savedResult.skipped) {
+            console.log('Airtable save skipped:', savedResult.reason);
+            airtableMessage = ` (Airtable save skipped: ${savedResult.reason})`;
+          } else if (savedResult.failed) {
+            console.warn('Airtable save failed:', savedResult.error);
+            airtableMessage = ` (Airtable save failed: ${savedResult.error})`;
+          } else {
             console.log('Data saved to Airtable successfully');
             airtableMessage = ` and saved ${savedResult.records.length} line items to Airtable`;
-          } catch (airtableError) {
-            console.warn('Airtable save failed, but continuing with data extraction:', airtableError.message);
-            airtableMessage = ' (Airtable save failed - check your table configuration)';
           }
-        } else {
-          console.log('Airtable not configured, skipping database save');
-          airtableMessage = ' (Airtable not configured)';
+        } catch (airtableError) {
+          console.warn('Airtable save failed, but continuing with data extraction:', airtableError.message);
+          airtableMessage = ' (Airtable save failed - check your table configuration)';
         }
 
         // Step 5: Send enhanced success response
