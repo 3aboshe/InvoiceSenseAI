@@ -89,7 +89,7 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
         )}
 
         {/* Invoice Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6 w-full grid-container">
           <div className="glass-card-hover p-3 sm:p-4 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 to-indigo-500/10 rounded-xl -z-10"></div>
             <div className="flex items-center space-x-3 sm:space-x-4">
@@ -183,8 +183,8 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
           </h3>
         </div>
 
-        <div className="overflow-x-auto w-full">
-          <table className="w-full min-w-full">
+        <div className="overflow-x-auto w-full table-container">
+          <table className="w-full min-w-full max-w-full">
             <thead>
               <tr className="border-b border-slate-700">
                 <th className="text-left py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium text-slate-400">

@@ -17,9 +17,9 @@ const ImageUploader = ({ onUpload, isLoading, error }) => {
   })
 
   return (
-    <div className="space-y-6 sm:space-y-8 w-full overflow-hidden">
+    <div className="space-y-6 sm:space-y-8 w-full overflow-hidden max-w-full">
       {/* Main Upload Area */}
-      <div className="glass-card p-4 sm:p-6 lg:p-8 w-full overflow-hidden">
+      <div className="glass-card p-4 sm:p-6 lg:p-8 w-full overflow-hidden max-w-full">
         <div
           {...getRootProps()}
           className={`

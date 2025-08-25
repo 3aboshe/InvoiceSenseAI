@@ -76,9 +76,9 @@ function AppContent() {
   }
 
   const Navigation = () => (
-    <nav className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700 w-full overflow-x-hidden">
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 w-full">
-        <div className="flex items-center justify-between h-14 sm:h-16 w-full">
+    <nav className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700 w-full overflow-x-hidden max-w-full">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 w-full overflow-x-hidden">
+        <div className="flex items-center justify-between h-14 sm:h-16 w-full overflow-x-hidden">
           {/* Logo and Title */}
           <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3">
             <div className="p-1 sm:p-1.5 lg:p-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg">
@@ -173,8 +173,8 @@ function AppContent() {
   );
 
   const UploadPage = () => (
-    <main className="flex-1 px-2 sm:px-4 lg:px-6 pb-4 overflow-x-hidden">
-      <div className="max-w-6xl mx-auto space-y-2 mt-8 w-full">
+    <main className="flex-1 px-2 sm:px-4 lg:px-6 pb-4 overflow-x-hidden w-full max-w-full">
+      <div className="max-w-6xl mx-auto space-y-2 mt-8 w-full overflow-x-hidden">
         {/* Upload Section */}
         <ImageUploader 
           onUpload={handleUpload} 
@@ -194,7 +194,7 @@ function AppContent() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-x-hidden w-full max-w-full">
       <Navigation />
       <Routes>
         <Route path="/" element={<UploadPage />} />
