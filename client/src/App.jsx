@@ -77,83 +77,90 @@ function AppContent() {
 
   const Navigation = () => (
     <nav className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center space-x-2 sm:space-x-3">
-            <div className="p-1.5 sm:p-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg">
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
+        <div className="flex items-center justify-between h-14 sm:h-16">
+          {/* Logo and Title */}
+          <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3">
+            <div className="p-1 sm:p-1.5 lg:p-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg">
+              <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-lg sm:text-xl font-bold text-white">
+              <h1 className="text-sm sm:text-lg lg:text-xl font-bold text-white">
                 InvoiceSense AI
               </h1>
             </div>
           </div>
           
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-1 bg-slate-700 rounded-lg p-1">
+          {/* Navigation Buttons */}
+          <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4">
+            <div className="flex items-center space-x-0.5 sm:space-x-1 bg-slate-700 rounded-lg p-0.5 sm:p-1">
               <button
                 onClick={() => navigate('/dashboard')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-2 ${
+                className={`px-1.5 sm:px-2 lg:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors flex items-center space-x-1 sm:space-x-2 ${
                   currentPath === '/dashboard' 
                     ? 'bg-blue-500 text-white' 
                     : 'text-slate-300 hover:text-white hover:bg-slate-600'
                 }`}
               >
-                <BarChart3 className="w-4 h-4" />
-                <span>Dashboard</span>
+                <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden xs:inline">Dashboard</span>
+                <span className="xs:hidden">Dash</span>
               </button>
               <button
                 onClick={() => navigate('/')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-2 ${
+                className={`px-1.5 sm:px-2 lg:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors flex items-center space-x-1 sm:space-x-2 ${
                   currentPath === '/' 
                     ? 'bg-blue-500 text-white' 
                     : 'text-slate-300 hover:text-white hover:bg-slate-600'
                 }`}
               >
-                <Upload className="w-4 h-4" />
+                <Upload className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span>Upload</span>
               </button>
               <button
                 onClick={() => navigate('/clients')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-2 ${
+                className={`px-1.5 sm:px-2 lg:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors flex items-center space-x-1 sm:space-x-2 ${
                   currentPath.startsWith('/clients') 
                     ? 'bg-blue-500 text-white' 
                     : 'text-slate-300 hover:text-white hover:bg-slate-600'
                 }`}
               >
-                <Users className="w-4 h-4" />
+                <Users className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span>Clients</span>
               </button>
               <button
                 onClick={() => navigate('/reports')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-2 ${
+                className={`px-1.5 sm:px-2 lg:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors flex items-center space-x-1 sm:space-x-2 ${
                   currentPath === '/reports' 
                     ? 'bg-blue-500 text-white' 
                     : 'text-slate-300 hover:text-white hover:bg-slate-600'
                 }`}
               >
-                <FileText className="w-4 h-4" />
+                <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span>Reports</span>
               </button>
             </div>
             
+            {/* Currency Toggle - Only show on upload page */}
             {currentPath === '/' && (
-              <div className="flex items-center space-x-2">
-                <span className="text-xs sm:text-sm font-medium text-slate-400">
+              <div className="flex items-center space-x-1 sm:space-x-2">
+                <span className="text-xs font-medium text-slate-400 hidden sm:inline">
                   IQD→USD
+                </span>
+                <span className="text-xs font-medium text-slate-400 sm:hidden">
+                  IQD
                 </span>
                 <button
                   onClick={toggleCurrencyConversion}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                  className={`relative inline-flex h-5 w-9 sm:h-6 sm:w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                     autoConvertCurrency 
                       ? 'bg-blue-500' 
                       : 'bg-slate-700'
                   }`}
                 >
                   <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      autoConvertCurrency ? 'translate-x-6' : 'translate-x-1'
+                    className={`inline-block h-3 w-3 sm:h-4 sm:w-4 transform rounded-full bg-white transition-transform ${
+                      autoConvertCurrency ? 'translate-x-4 sm:translate-x-6' : 'translate-x-1'
                     }`}
                   />
                 </button>
