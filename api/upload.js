@@ -344,55 +344,30 @@ const saveToAirtable = async (parsedData, metadata = {}) => {
       };
     }
     
-    // Check if client exists, if not create one
-    let clientRecord = null;
-    try {
-      console.log('Checking for existing client:', company);
-      const existingClients = await base('Clients').select({
-        filterByFormula: `OR({Name} = '${company}', {Email} = '${company}')`
-      }).firstPage();
-      
-      if (existingClients.length > 0) {
-        clientRecord = existingClients[0];
-        console.log('Found existing client:', clientRecord.id);
-      } else {
-        // Create new client
-        console.log('Creating new client:', company);
-        clientRecord = await base('Clients').create({
-          'Name': company,
-          'Client ID': client_id,
-          'Status': 'active',
-          'Join Date': new Date().toISOString().split('T')[0],
-          'Industry': 'Unknown',
-          'Notes': `Auto-created from invoice processing on ${new Date().toISOString()}`
-        });
-        console.log('Created new client:', clientRecord.id);
-      }
-    } catch (clientError) {
-      console.warn('Could not create/find client, continuing with invoice creation:', clientError);
-    }
-    
     // Generate invoice number
     const invoiceNumber = `INV-${Date.now().toString().slice(-8)}`;
     console.log('Generated invoice number:', invoiceNumber);
     
-    // Create records for each line item with enhanced data
+    // Create records for each line item with simplified field mapping
     const records = line_items.map((item, index) => ({
       fields: {
-        'Client ID': clientRecord ? clientRecord.id : client_id,
-        'Company': company,
-        'Description': item.description,
+        // Basic invoice fields
+        'Company': company || 'Unknown Company',
+        'Client ID': client_id || 'Unknown Client',
+        'Description': item.description || 'No description',
         'Quantity': parseFloat(item.quantity) || 1,
         'Unit Price': parseFloat(item.unit_price) || 0,
         'Total': parseFloat(item.amount || item.total) || 0,
         'Currency': item.currency || 'USD',
         'Invoice Number': `${invoiceNumber}-${index + 1}`,
         'Status': 'Processed',
+        'Date': new Date().toISOString().split('T')[0],
+        'Created': new Date().toISOString(),
+        
+        // Additional metadata fields (optional)
         'Processing Time': processingTime || 0,
         'Original Filename': originalFilename || 'unknown',
-        'Processed By': userId || 'anonymous',
-        'Date': new Date().toISOString().split('T')[0],
-        'Created': new Date().toISOString()
+        'Processed By': userId || 'anonymous'
       }
     }));
 
@@ -407,7 +382,7 @@ const saveToAirtable = async (parsedData, metadata = {}) => {
     return {
       records: createdRecords,
       invoiceNumber,
-      clientId: clientRecord ? clientRecord.id : client_id
+      clientId: client_id
     };
   } catch (error) {
     console.error('Error saving to Airtable:', error);
@@ -417,6 +392,12 @@ const saveToAirtable = async (parsedData, metadata = {}) => {
       status: error.status,
       response: error.response?.data
     });
+    
+    // Check if it's a field name error
+    if (error.message && error.message.includes('field')) {
+      console.error('Airtable field name error detected. Please check your table field names.');
+      console.error('Expected fields: Company, Client ID, Description, Quantity, Unit Price, Total, Currency, Invoice Number, Status, Date, Created');
+    }
     
     // Return a result indicating the save failed but don't throw
     return {
