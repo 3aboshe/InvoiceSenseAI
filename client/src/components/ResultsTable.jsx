@@ -59,7 +59,7 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
   const hasConvertedItems = line_items?.some(item => item.converted)
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full overflow-hidden">
       {/* Success Header */}
       <div className="glass-card p-3 sm:p-4 lg:p-6">
         <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 mb-3 sm:mb-4">
@@ -89,7 +89,7 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
         )}
 
         {/* Invoice Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6 w-full">
           <div className="glass-card-hover p-3 sm:p-4 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 to-indigo-500/10 rounded-xl -z-10"></div>
             <div className="flex items-center space-x-3 sm:space-x-4">
@@ -145,9 +145,9 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
         </div>
 
         {/* Total Amount */}
-        <div className="glass-card-hover p-3 sm:p-4">
+        <div className="glass-card-hover p-3 sm:p-4 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-indigo-500/20 rounded-xl -z-10"></div>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0 w-full">
             <div className="flex items-center space-x-3 sm:space-x-4">
               <div className="p-2 sm:p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg sm:rounded-xl">
                 <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
@@ -173,7 +173,7 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
       </div>
 
       {/* Line Items Table */}
-      <div className="glass-card p-3 sm:p-4 lg:p-6">
+      <div className="glass-card p-3 sm:p-4 lg:p-6 w-full overflow-hidden">
         <div className="flex items-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
           <div className="p-2 bg-indigo-900/30 rounded-lg">
             <Package className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400" />
@@ -183,20 +183,20 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
           </h3>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        <div className="overflow-x-auto w-full">
+          <table className="w-full min-w-full">
             <thead>
               <tr className="border-b border-slate-700">
-                <th className="text-left py-3 px-4 text-xs sm:text-sm font-medium text-slate-400">
+                <th className="text-left py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium text-slate-400">
                   Description
                 </th>
-                <th className="text-right py-3 px-4 text-xs sm:text-sm font-medium text-slate-400">
+                <th className="text-right py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium text-slate-400 whitespace-nowrap">
                   Quantity
                 </th>
-                <th className="text-right py-3 px-4 text-xs sm:text-sm font-medium text-slate-400">
+                <th className="text-right py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium text-slate-400 whitespace-nowrap">
                   Unit Price
                 </th>
-                <th className="text-right py-3 px-4 text-xs sm:text-sm font-medium text-slate-400">
+                <th className="text-right py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium text-slate-400 whitespace-nowrap">
                   Amount
                 </th>
               </tr>
@@ -204,23 +204,23 @@ const ResultsTable = ({ data, autoConvertCurrency }) => {
             <tbody>
               {line_items?.map((item, index) => (
                 <tr key={index} className="table-row border-b border-slate-800">
-                  <td className="py-3 px-4 text-sm text-white">
-                    <div>
-                      <p className="font-medium">{item.description || 'N/A'}</p>
+                  <td className="py-3 px-2 sm:px-4 text-sm text-white max-w-0 w-full">
+                    <div className="truncate">
+                      <p className="font-medium truncate">{item.description || 'N/A'}</p>
                       {item.converted && (
-                        <p className="text-xs text-blue-400 mt-1">
+                        <p className="text-xs text-blue-400 mt-1 truncate">
                           Originally: {formatCurrency(item.original_amount, item.original_currency)}
                         </p>
                       )}
                     </div>
                   </td>
-                  <td className="py-3 px-4 text-sm text-white text-right">
+                  <td className="py-3 px-2 sm:px-4 text-sm text-white text-right whitespace-nowrap">
                     {item.quantity || 'N/A'}
                   </td>
-                  <td className="py-3 px-4 text-sm text-white text-right">
+                  <td className="py-3 px-2 sm:px-4 text-sm text-white text-right whitespace-nowrap">
                     {item.unit_price ? formatCurrency(item.unit_price, item.currency) : 'N/A'}
                   </td>
-                  <td className="py-3 px-4 text-sm text-white text-right font-medium">
+                  <td className="py-3 px-2 sm:px-4 text-sm text-white text-right font-medium whitespace-nowrap">
                     {formatCurrency(item.amount, item.currency)}
                   </td>
                 </tr>

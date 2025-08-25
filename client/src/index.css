@@ -16,10 +16,13 @@
 @layer base {
   html {
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
   }
   
   body {
     @apply antialiased;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 }
 

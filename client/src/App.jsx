@@ -173,8 +173,8 @@ function AppContent() {
   );
 
   const UploadPage = () => (
-    <main className="flex-1 px-4 sm:px-6 pb-4">
-      <div className="max-w-6xl mx-auto space-y-2 mt-8">
+    <main className="flex-1 px-2 sm:px-4 lg:px-6 pb-4 overflow-x-hidden">
+      <div className="max-w-6xl mx-auto space-y-2 mt-8 w-full">
         {/* Upload Section */}
         <ImageUploader 
           onUpload={handleUpload} 
